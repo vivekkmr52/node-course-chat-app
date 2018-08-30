@@ -20,22 +20,38 @@ io.on('connection', (socket) => {
   //   createdAt: 123
   // });
 
-  socket.on('createMessage', (message) => {
-    console.log('createMessage', message);
-    io.emit('newMessage', {
-      from: message.from,
-      text: message.text,
-      createdAt: new Date().getTime()
-    });
+  socket.emit('newMessage', {
+    from: 'admin',
+    text: 'Welcome to the chat app'
   });
 
+  socket.broadcast.emit('newMessage', {
+    from: 'admin',
+    text: 'New user joined',
+    createdAt: new Date().getTime()
+  });
+
+  socket.on('createMessage', (message) => {
+    console.log('createMessage', message);
+    // io.emit('newMessage', {
+    //   from: message.from,
+    //   text: message.text,
+    //   createdAt: new Date().getTime()
+    // });
+
+    // socket.broadcast.emit('newMessage', {
+    //   from: message.from,
+    //   text: message.text,
+    //   createdAt: new Date().getTime()
+    // });
+  });
   // socket.on('createEmail', (newEmail) => {
   //   console.log('createEmail', newEmail);
   // });
 
-socket.on('disconnect', () => {
-  console.log('Dosconnected from server');
-});
+  socket.on('disconnect', () => {
+    console.log('Dosconnected from server');
+  });
 });
 server.listen(port, () => {
   console.log(`Server is up and running on port ${port}`);
